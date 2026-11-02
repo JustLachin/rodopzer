@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../vendors/bootstrap.min.css">
+<style>
+  body{width:440px;font:13px/1.4 Segoe UI,system-ui;color:#212529}
+  /* ayri pencere + yan panel: genislik kapsayiciya uyar (panel daraltilabilir) */
+  body.pencere{width:auto;min-width:360px;max-width:100%}
+  .nav-sm .nav-link{padding:.25rem .6rem;font-size:13px}
+  .kayit{display:flex;gap:8px;padding:6px 8px;border-bottom:1px solid #eee;cursor:pointer;align-items:center;border-radius:4px}
+  .kayit.sec{background:#e7f1ff}
+  .kayit b{flex:0 0 48px}
+  .kayit span{flex:1;font-size:12px;color:#555}
+  .kayit span.badge{flex:0 0 auto;color:#fff}
+  .minik{font-size:11px;color:#8a94a3}
+  .sofor-satir{display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed #e5e9f0;font-size:12px;align-items:center}
+  .sofor-kod{font-weight:700;flex:0 0 110px}
+  .sofor-bilgi{flex:1;display:flex;flex-direction:column}
+  textarea{font:11px/1.35 Consolas,monospace}
+  footer{font-size:11px;color:#98a2b3;text-align:center;padding:8px 0 2px}
+</style>
+</head>
+<body class="p-2 bg-light">
+
+<div class="card shadow-sm">
+  <div class="card-header py-2">
+    <div class="d-flex justify-content-between align-items-center">
+      <strong>Rodopzer <span class="badge bg-secondary" id="sVer">-</span></strong>
+    </div>
+    <ul class="nav nav-pills nav-sm mt-2" id="sekmeler">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pAna" type="button">Ana</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pAyr" type="button">Ayarlar</button></li>
+    </ul>
+  </div>
+
+  <div class="card-body p-3">
+    <div class="tab-content">
+
+      <!-- ============ ANA ============ -->
+      <div class="tab-pane fade show active" id="pAna">
+        <div class="row g-2 mb-2">
+          <div class="col-4">
+            <button class="btn btn-success w-100 px-1 text-nowrap" style="font-size:14px" id="btnArr">Arrival PDF</button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-warning w-100 px-1 text-nowrap text-white" style="font-size:14px" id="btnDep">Departure PDF</button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-primary w-100 px-1 text-nowrap" style="font-size:14px" id="btnYolcu" title="Yolcu listesi Excel'i (GrupKodu sütunlu .xls/.xlsx)">Yolcu Excel</button>
+          </div>
+        </div>
+        <input type="file" id="pdf" accept="application/pdf" class="d-none">
+        <input type="file" id="yolcuDosya" accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="d-none">
+        <div class="minik mb-1" id="pdfDurum"></div>
+        <div class="minik mb-2" id="yolcuDurum"></div>
+
+        <div class="row g-2 align-items-end mb-2">
+          <div class="col-4">
+            <label class="minik d-block mb-1">Sefer tarihi (1. aşama)</label>
+            <input type="date" id="tarih" class="form-control form-control-sm">
+          </div>
+          <div class="col-8">
+            <div class="row g-1">
+              <div class="col-3"><button class="btn btn-success w-100 px-1" id="btnA1">1. Aşama</button></div>
+              <div class="col-3"><button class="btn btn-warning w-100 px-1 text-white" id="btnA2">2. Aşama</button></div>
+              <div class="col-3"><button class="btn btn-info w-100 px-1 text-white" id="btnA3">3. Aşama</button></div>
+              <div class="col-3"><button class="btn btn-primary w-100 px-1" id="btnA4" title="Seçili uçuşun yolcu Excel'ini GTS'ye yükler">4. Aşama</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-1 mb-1">
+          <button class="btn btn-dark btn-sm flex-grow-1" id="btnA5"
+            title="Seçili uçuştan listenin sonuna kadar: sefer, personel, grup ve yolcu Excel'ini GTS'ye otomatik girer">5. Aşama — Otomatik (seçili uçuştan itibaren)</button>
+          <button class="btn btn-outline-danger btn-sm d-none" id="btnA5Dur">Durdur</button>
+        </div>
+        <div class="minik mb-2" id="a5Durum"></div>
+
+        <div class="row g-2 mb-2">
+          <div class="col-7">
+            <label class="minik d-block mb-1">Şoför (2. aşama)</label>
+            <select id="selSofor" class="form-select form-select-sm">
+              <option value="">Otomatik (Plakaya Göre)</option>
+            </select>
+          </div>
+          <div class="col-5">
+            <label class="minik d-block mb-1">İl (3. aşama)</label>
+            <select id="selIl" class="form-select form-select-sm">
+              <option value="">Otomatik (Bölge)</option>
+              <option value="ANTALYA">ANTALYA</option>
+              <option value="MUĞLA">MUĞLA</option>
+              <option value="İZMİR">İZMİR</option>
+              <option value="İSTANBUL">İSTANBUL</option>
+              <option value="AYDIN">AYDIN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <button class="btn btn-sm btn-outline-secondary px-3" id="btnGeri"
+            title="Önceki uçuş" disabled>&#9664; Geri</button>
+          <span class="minik flex-grow-1 text-center" id="secSayac">Kayıt yok</span>
+          <button class="btn btn-sm btn-outline-secondary px-3" id="btnIleri"
+            title="Sonraki uçuş" disabled>İleri &#9654;</button>
+        </div>
+
+        <div class="border rounded p-2 mb-1 bg-white" id="detay"
+          style="font-size:12px;border:1px solid #dee2e6">Seçili uçuş yok.</div>
+
+        <div class="minik mb-1">Uçuşlar — seçmek için tıklayın</div>
+        <div class="border rounded p-2 mb-2" style="max-height:150px;overflow:auto" id="liste"></div>
+
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label class="minik mb-0">Plan özeti</label>
+          <div class="d-flex gap-1">
+            <button class="btn btn-sm btn-outline-success py-0 px-2" style="font-size:11px" id="btnJsonAktar1" title="1. Aşama kayıtlarını ayrı JSON olarak indir">📥 1. Aşama JSON</button>
+            <button class="btn btn-sm btn-outline-warning py-0 px-2" style="font-size:11px" id="btnJsonAktar2" title="2. Aşama kayıtlarını ayrı JSON olarak indir">📥 2. Aşama JSON</button>
+          </div>
+        </div>
+        <textarea id="xmlView" readonly spellcheck="false" rows="3"
+          class="form-control form-control-sm mb-2" style="resize:none"></textarea>
+
+        <div class="d-grid gap-1 mb-1">
+          <button class="btn btn-sm btn-outline-secondary" id="btnTara">Sayfa tara (sekmeler + form dökümü)</button>
+        </div>
+        <textarea id="taramaSonuc" class="d-none form-control form-control-sm mb-2" rows="6"
+          readonly spellcheck="false" placeholder="Tarama sonucu burada görünür."></textarea>
+        <div class="small fw-semibold" id="dolDurum"></div>
+        <div class="minik" id="imzaNotu"></div>
+      </div>
+
+      <!-- ============ AYARLAR ============ -->
+      <div class="tab-pane fade" id="pAyr">
+
+        <h6 class="border-bottom pb-1 mb-2 mt-1">Sunucu</h6>
+        <label class="minik">Sunucu adresi</label>
+        <input type="text" id="srv" class="form-control form-control-sm mb-1" placeholder="https://sunucu.alanadiniz.com">
+        <button class="btn btn-primary btn-sm w-100 mb-2" id="btnSrv">Sunucuyu kaydet</button>
+
+        <h6 class="border-bottom pb-1 mb-2 mt-4">Sabit değerler</h6>
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <label class="minik">Araç telefonu (1. aşama)</label>
+            <input type="tel" id="sabitTel" class="form-control form-control-sm" placeholder="05xx xxx xx xx">
+          </div>
+          <div class="col-6">
+            <label class="minik">Grup ücreti (3. aşama)</label>
+            <input type="text" id="sabitUcret" class="form-control form-control-sm" placeholder="Örn. 1500">
+          </div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <label class="minik">Bölge tanınmazsa: anahtar</label>
+            <input type="text" id="sabitAnahtar" class="form-control form-control-sm" placeholder="Örn. BELEK">
+          </div>
+          <div class="col-6">
+            <label class="minik">Bölge tanınmazsa: ilçe</label>
+            <input type="text" id="sabitIlce" class="form-control form-control-sm" placeholder="Örn. SERİK">
+          </div>
+        </div>
+        <div class="minik mb-2">Yalnız otel bölgesi hiçbir kurala/tabloya uymadığında kullanılır; tanınan bölgeleri ezmez.</div>
+        <button class="btn btn-primary btn-sm w-100 mb-1" id="btnSabitKaydet">Sabit Değerleri Kaydet</button>
+        <div class="small mb-3" id="sabitDurum"></div>
+
+        <!-- 1. Aşama Kayıtlı Anahtar ve İlçeler -->
+        <h6 class="border-bottom pb-1 mb-2 mt-3 text-success">1. Aşama Kayıtlı Anahtar ve İlçeler (Sefer Açıklaması)</h6>
+        <div class="d-flex gap-2 mb-1">
+          <input type="file" id="ayrAnahtarDosya1" accept=".json,application/json" class="d-none">
+          <button class="btn btn-outline-primary btn-sm py-0 px-2" style="font-size:11px" id="btnAyrAnahtarYukle1">JSON Yükle</button>
+          <button class="btn btn-outline-success btn-sm py-0 px-2" style="font-size:11px" id="btnAyrAnahtarIndir1">JSON Dışa Aktar</button>
+          <button class="btn btn-outline-secondary btn-sm py-0 px-2" style="font-size:11px" id="btnAyrAnahtarTemizle1">Temizle</button>
+        </div>
+        <div class="border rounded p-2 mb-2 bg-white" style="max-height:110px;overflow:auto" id="ayrAnahtarListe1"></div>
+        <div class="row g-1 mb-1">
+          <div class="col-5"><input id="ayrAnahtar1" class="form-control form-control-sm" placeholder="Anahtar (BELEK)"></div>
+          <div class="col-4"><input id="ayrIlce1" class="form-control form-control-sm" placeholder="İlçe (SERİK)"></div>
+          <div class="col-3"><button class="btn btn-sm btn-success w-100" id="btnAyrAnahtarEkle1">Kaydet</button></div>
+        </div>
+        <div class="small mb-3" id="ayrAnahtarDurum1"></div>
+
+        <!-- 2. Aşama Kayıtlı Anahtar ve İlçeler -->
+        <h6 class="border-bottom pb-1 mb-2 mt-2 text-warning">2. Aşama Kayıtlı Anahtar ve İlçeler (Grup Bilgileri / İlçe)</h6>
+        <div class="d-flex gap-2 mb-1">
+          <input type="file" id="ayrAnahtarDosya2" accept=".json,application/json" class="d-none">
+          <button class="btn btn-outline-primary btn-sm py-0 px-2" style="font-size:11px" id="btnAyrAnahtarYukle2">JSON Yükle</button>
+          <button class="btn btn-outline-success btn-sm py-0 px-2" style="font-size:11px" id="btnAyrAnahtarIndir2">JSON Dışa Aktar</button>
+          <button class="btn btn-outline-secondary btn-sm py-0 px-2" style="font-size:11px" id="btnAyrAnahtarTemizle2">Temizle</button>
+        </div>
+        <div class="border rounded p-2 mb-2 bg-white" style="max-height:110px;overflow:auto" id="ayrAnahtarListe2"></div>
+        <div class="row g-1 mb-1">
+          <div class="col-5"><input id="ayrAnahtar2" class="form-control form-control-sm" placeholder="Anahtar (BELEK)"></div>
+          <div class="col-4"><input id="ayrIlce2" class="form-control form-control-sm" placeholder="İlçe (SERİK)"></div>
+          <div class="col-3"><button class="btn btn-sm btn-warning text-white w-100" id="btnAyrAnahtarEkle2">Kaydet</button></div>
+        </div>
+        <div class="small mb-3" id="ayrAnahtarDurum2"></div>
+
+        <h6 class="border-bottom pb-1 mb-2 text-primary">4. Aşama (Yolcu Excel)</h6>
+        <label class="minik">Grup dosyaları klasörü (bir kez izin verilir)</label>
+        <div class="d-flex gap-2 align-items-center mb-1">
+          <button class="btn btn-primary btn-sm" id="btnKlasorSec">Klasör seç</button>
+          <button class="btn btn-outline-primary btn-sm d-none" id="btnKlasorIzin">İzin ver</button>
+          <button class="btn btn-outline-secondary btn-sm d-none" id="btnKlasorBirak">Klasörü bırak</button>
+        </div>
+        <div class="small mb-1" id="klasorDurum">Klasör seçilmedi.</div>
+        <div class="minik mb-2">Seçilen klasöre dosyalar indirme yapılmadan doğrudan yazılır
+          (<code>YYYY-AA-GG/GrupKodu.xls</code>) ve 4. aşamada oradan okunur; Excel'de düzelttiğiniz dosya yüklenir.
+          "Klasör seç" eklentinin kendi sekmesini açar (yan panel klasör penceresi açamaz); seçimi orada yapın.
+          Chrome izin sorarsa <b>"Her ziyarette izin ver"</b>i seçin.</div>
+        <label class="minik">Klasör yoksa "Tek ZIP indir" ile inecek yer</label>
+        <div class="input-group input-group-sm mb-2">
+          <span class="input-group-text">İndirilenler/</span>
+          <input type="text" id="yolcuKlasor" class="form-control form-control-sm" placeholder="Rodopzer/Yolcu">
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="otoKaydet">
+          <label class="form-check-label small" for="otoKaydet">Dosyayı ekledikten sonra GTS'de "Kaydet"e otomatik bas</label>
+        </div>
+        <div class="d-flex gap-2 mb-1">
+          <button class="btn btn-outline-primary btn-sm" id="btnYolcuKaydet">Grup dosyalarını kaydet (klasör / ZIP)</button>
+          <button class="btn btn-outline-secondary btn-sm" id="btnYolcuTemizle">Yolcu listesini sil</button>
+        </div>
+        <div class="small mb-3" id="yolcuAyarDurum"></div>
+
+        <h6 class="border-bottom pb-1 mb-2">Şoförler (tarif 2. aşama)</h6>
+        <div class="d-flex gap-2 mb-1">
+          <input type="file" id="soforDosya" accept=".json,application/json" class="d-none">
+          <button class="btn btn-outline-primary btn-sm" id="btnSoforYukle">JSON Yükle</button>
+          <button class="btn btn-outline-success btn-sm" id="btnSoforIndir">JSON Dışa Aktar</button>
+          <button class="btn btn-outline-secondary btn-sm" id="btnSoforTemizle">Temizle</button>
+        </div>
+        <div class="small mb-1" id="soforDurum"></div>
+        <div class="border rounded p-2 mb-2" style="max-height:170px;overflow:auto" id="soforListe"></div>
+
+        <label class="minik">Şoför ekle / düzenle</label>
+        <div class="row g-1 mb-1">
+          <div class="col-6"><input id="sfKodu" class="form-control form-control-sm" placeholder="Kod"></div>
+          <div class="col-6"><input id="sfPlaka" class="form-control form-control-sm" placeholder="Plaka (zorunlu)"></div>
+        </div>
+        <div class="row g-1 mb-1">
+          <div class="col-6"><input id="sfSofor" class="form-control form-control-sm" placeholder="Şoför adı (zorunlu)"></div>
+          <div class="col-6"><input id="sfBolge" class="form-control form-control-sm" placeholder="Bölge"></div>
+        </div>
+        <div class="row g-1 mb-3">
+          <div class="col-4"><input id="sfCinsiyet" class="form-control form-control-sm" placeholder="Cinsiyet"></div>
+          <div class="col-8 d-flex gap-2">
+            <button class="btn btn-sm btn-primary" id="btnSoforKaydet">Kaydet</button>
+            <button class="btn btn-sm btn-outline-secondary" id="btnSoforYeni">Yeni</button>
+          </div>
+        </div>
+
+        <h6 class="border-bottom pb-1 mb-2">Güncelleme</h6>
+        <div class="d-flex gap-2 mb-1">
+          <button class="btn btn-outline-primary btn-sm" id="btnGuncelle">Sunucudan İndir</button>
+        </div>
+        <div class="small" id="guncelDurum">Kontrol ediliyor...</div>
+
+        <h6 class="border-bottom pb-1 mb-2 mt-4">Kısayollar</h6>
+        <div class="small mb-1" id="ksaListe"></div>
+        <button class="btn btn-outline-secondary btn-sm" id="btnKisayol">Kısayolları yönet (chrome://extensions/shortcuts)</button>
+
+        <h6 class="border-bottom pb-1 mb-2 mt-4">Pencere</h6>
+        <div class="d-flex gap-2 mb-1">
+          <button class="btn btn-primary btn-sm" id="btnPanel">Sağ panele göm</button>
+          <button class="btn btn-outline-secondary btn-sm" id="btnPencere">Ayrı pencerede aç</button>
+        </div>
+        <div class="minik mb-3" id="pencereDurum">Sağ panel: sekme değiştirsen de tarayıcının
+          sağında açık kalır (Chrome 116+). Panel simgesiyle de açıp kapatabilirsin.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  © Rodopzer · <a href="mailto:hello@soydan.me" style="color:#5b8def">hello@soydan.me</a>
+</footer>
+
+<script src="../vendors/bootstrap.bundle.min.js"></script>
+<script src="../vendors/pdf.min.js"></script>
+<script src="../kurallar.js"></script>
+<script src="../vendors/xlsx.full.min.js"></script>
+<script src="../yolcu.js"></script>
+<script src="../klasor.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

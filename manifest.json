@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Rodopzer",
+  "version": "1.6.0",
+  "description": "Rodopzer GTS form dolgusu. Tamamen cevrimdisi calisir: PDF okuma ve tarif uretimi eklentinin icindedir.",
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Rodopzer"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "popup/pencere.html"
+  },
+  "commands": {
+    "asama1": {
+      "suggested_key": { "default": "Alt+1" },
+      "description": "1. aşamayı doldur"
+    },
+    "asama2": {
+      "suggested_key": { "default": "Alt+2" },
+      "description": "2. aşamayı doldur"
+    },
+    "asama3": {
+      "suggested_key": { "default": "Alt+3" },
+      "description": "3. aşamayı doldur"
+    },
+    "asama4": {
+      "suggested_key": { "default": "Alt+4" },
+      "description": "4. aşama: seçili uçuşun yolcu Excel'ini yükle"
+    },
+    "asama5": {
+      "description": "5. aşama: seçili uçuştan itibaren tüm akışı otomatik yap"
+    }
+  },
+  "permissions": ["storage", "activeTab", "scripting", "downloads", "sidePanel"],
+  "host_permissions": ["<all_urls>"]
+}

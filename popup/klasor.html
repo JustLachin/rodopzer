@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Rodopzer — Yolcu klasörü</title>
+<link rel="stylesheet" href="../vendors/bootstrap.min.css">
+<style>
+  body{font:14px/1.5 Segoe UI,system-ui;color:#212529;background:#f8f9fa}
+  .kutu{max-width:560px;margin:48px auto}
+  .minik{font-size:12px;color:#6c757d}
+</style>
+</head>
+<body>
+<div class="kutu card shadow-sm">
+  <div class="card-body p-4">
+    <h5 class="mb-1">Rodopzer · Yolcu klasörü</h5>
+    <p class="minik mb-3">Grup dosyaları (<code>YYYY-AA-GG/GrupKodu.xls</code>) bu klasöre indirme yapılmadan yazılır
+      ve 4. aşamada buradan okunur. Klasörü bir kez seçmeniz yeterli.</p>
+
+    <div class="border rounded p-3 mb-3 bg-white" id="durum">Kontrol ediliyor…</div>
+
+    <div class="alert alert-warning d-none" id="braveYardim">
+      <div class="fw-semibold mb-1">Brave'de klasör erişimi kapalı (Brave'in varsayılanı)</div>
+      <ol class="mb-2 ps-3 small">
+        <li>Aşağıdaki düğmeyle ayar sayfasını açın (açılmazsa adresi kopyalayıp adres çubuğuna yapıştırın).</li>
+        <li><b>File System Access API</b> satırını <b>Enabled</b> yapın.</li>
+        <li>Alttaki <b>Relaunch</b> düğmesiyle Brave'i yeniden başlatın, sonra bu sayfaya dönüp <b>Klasör seç</b>'e basın.</li>
+      </ol>
+      <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-sm btn-warning" id="btnBraveAc">Brave ayarını aç</button>
+        <button class="btn btn-sm btn-outline-secondary" id="btnBraveKopyala">Adresi kopyala</button>
+        <code class="align-self-center small" id="braveAdres"></code>
+      </div>
+      <div class="small mt-2">Bu ayar açılmadan da eklenti çalışır: 4. aşama dosyayı doğrudan yükler,
+        grup dosyaları istenirse panelden tek ZIP olarak indirilir.</div>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap mb-2">
+      <button class="btn btn-primary" id="btnSec">Klasör seç</button>
+      <button class="btn btn-outline-primary d-none" id="btnIzin">İzin ver ve dosyaları yaz</button>
+      <button class="btn btn-outline-secondary d-none" id="btnKapat">Bu sekmeyi kapat</button>
+    </div>
+    <div class="minik">Chrome izin sorarsa <b>"Her ziyarette izin ver"</b>i seçin; böylece tekrar sorulmaz.</div>
+    <div class="mt-3 small" id="sonuc"></div>
+  </div>
+</div>
+<script src="../vendors/xlsx.full.min.js"></script>
+<script src="../yolcu.js"></script>
+<script src="../klasor.js"></script>
+<script src="klasor-sayfa.js"></script>
+</body>
+</html>

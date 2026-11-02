@@ -1,0 +1,49 @@
+{
+  "asama": "2. Aşama",
+  "anahtarlar": [
+    {
+      "anahtar": "KIRIS",
+      "ilce": "KEMER"
+    },
+    {
+      "anahtar": "SORGUN",
+      "ilce": "SERİK"
+    },
+    {
+      "anahtar": "TURGUT",
+      "ilce": "BODRUM"
+    },
+    {
+      "anahtar": "LARA",
+      "ilce": "MERKEZ"
+    },
+    {
+      "anahtar": "EGE",
+      "ilce": "BODRUM"
+    },
+    {
+      "anahtar": "REIS",
+      "ilce": "BDM"
+    },
+    {
+      "anahtar": "KIZILAGAC",
+      "ilce": "SERİK"
+    },
+    {
+      "anahtar": "KUMKOY",
+      "ilce": "SERİK"
+    },
+    {
+      "anahtar": "GOCEK",
+      "ilce": "FETHİYE"
+    },
+    {
+      "anahtar": "ICMELER",
+      "ilce": "MARMARİS"
+    },
+    {
+      "anahtar": "KEMER CENTER",
+      "ilce": "KEMER"
+    }
+  ]
+}

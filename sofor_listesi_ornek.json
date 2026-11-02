@@ -1,0 +1,14 @@
+[
+  {"kodu": "M1 SPRINTER", "plaka": "07 ALM 580", "sofor": "RAMAZAN ACAR", "bolge": "ANTALYA", "cinsiyet": "ERKEK"},
+  {"kodu": "M2 SPRINTER", "plaka": "07 ARB 023", "sofor": "AHMET ERDOĞAN", "bolge": "ANTALYA", "cinsiyet": "ERKEK"},
+  {"kodu": "M3 SPRINTER", "plaka": "07 ALP 377", "sofor": "ASİM SELİM", "bolge": "ANTALYA", "cinsiyet": "ERKEK"},
+  {"kodu": "M4 SPRİNTER", "plaka": "07 AYF 225", "sofor": "RAVİL DİLAVER", "bolge": "ANTALYA", "cinsiyet": "ERKEK"},
+  {"kodu": "M5 SPRİNTER", "plaka": "07 BCC 367", "sofor": "RÜSTEM SELİM", "bolge": "ANTALYA", "cinsiyet": "ERKEK"},
+  {"kodu": "M6 SPRİNTER", "plaka": "07 BAD 046", "sofor": "SERKAN YILMAZ", "bolge": "ANTALYA", "cinsiyet": "ERKEK"},
+  {"kodu": "M7 SPRİNTER", "plaka": "07 BYP 846", "sofor": "HAKAN ARSLAN", "bolge": "EGE", "cinsiyet": "ERKEK"},
+  {"kodu": "M8 SPRİNTER", "plaka": "34 PVP 048", "sofor": "AYHAN ZAFER", "bolge": "EGE", "cinsiyet": "ERKEK"},
+  {"kodu": "M1 VİTO", "plaka": "07 AFV 796", "sofor": "GÖRKEM KURT", "bolge": "EGE", "cinsiyet": "ERKEK"},
+  {"kodu": "M2 VITO", "plaka": "07 BBK 620", "sofor": "MEHMET CANKURT", "bolge": "ANTALYA", "cinsiyet": "ERKEK"},
+  {"kodu": "M3 VITO", "plaka": "07 BBG 737", "sofor": "MURAT ÇELİK", "bolge": "EGE", "cinsiyet": "ERKEK"},
+  {"kodu": "M4 VITO", "plaka": "07 BYP 315", "sofor": "METİN ÖZDEMİR", "bolge": "EGE", "cinsiyet": "ERKEK"}
+]
